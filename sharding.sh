@@ -14,7 +14,7 @@ mongod --config ./confs/shard0/r2.conf
 
 sleep 5
 # connect to one server and initiate the set
-mongo --port 37017 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/crazyengage.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
+mongo --port 37017 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
 rs.initiate({
   _id: "s0",
   members: [
@@ -43,7 +43,7 @@ mongod --config ./confs/shard1/r2.conf
 
 sleep 5
 
-mongo --port 47017 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/crazyengage.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
+mongo --port 47017 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
 rs.initiate({
   _id: "s1",
   members: [
@@ -72,7 +72,7 @@ mongod --config ./confs/shard2/r2.conf
 
 sleep 5
 
-mongo --port 57017 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/crazyengage.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
+mongo --port 57017 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
 rs.initiate({
   _id: "s2",
   members: [
@@ -102,7 +102,7 @@ mongod --config ./confs/config/r2.conf
 
 sleep 5
 
-mongo --port 57040 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/crazyengage.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
+mongo --port 57040 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
 rs.initiate({
 	_id: "cfg",
 	configsvr: true,
@@ -121,7 +121,7 @@ sleep 60
 echo "Connnecting to mongos and enabling sharding"
 
 # add shards and enable sharding on the growthfunnel db
-mongo --port 27018 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/crazyengage.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
+mongo --port 27018 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
 
 # Create an super administrator 
 use admin
