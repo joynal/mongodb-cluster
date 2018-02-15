@@ -1,0 +1,15 @@
+{
+  "name": "mongodb-sample-cluster",
+  "version": "1.0.0",
+  "description": "Mongo sample cluster",
+  "main": "index.js",
+  "repository": "git@github.com:joynal/mongodb-sample-cluster.git",
+  "author": "Joynal Abedin <joynal3483@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "faker": "^4.1.0",
+    "mongoose": "^5.0.1",
+    "uuid": "^3.2.1",
+    "uuid-parse": "^1.0.0"
+  }
+}
