@@ -18,9 +18,9 @@ mongo --port 37017 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mo
 rs.initiate({
   _id: "s0",
   members: [
-    { _id : 0, host : "localhost:37017" },
-    { _id : 1, host : "localhost:37018" },
-    { _id : 2, host : "localhost:37019", arbiterOnly: true }
+    { _id : 0, host : "database.crazyengage.com:37017" },
+    { _id : 1, host : "database.crazyengage.com:37018" },
+    { _id : 2, host : "database.crazyengage.com:37019", arbiterOnly: true }
   ]
 })
 
@@ -47,9 +47,9 @@ mongo --port 47017 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mo
 rs.initiate({
   _id: "s1",
   members: [
-    { _id : 0, host : "localhost:47017" },
-    { _id : 1, host : "localhost:47018" },
-    { _id : 2, host : "localhost:47019", arbiterOnly: true }
+    { _id : 0, host : "database.crazyengage.com:47017" },
+    { _id : 1, host : "database.crazyengage.com:47018" },
+    { _id : 2, host : "database.crazyengage.com:47019", arbiterOnly: true }
   ]
 })
 
@@ -76,9 +76,9 @@ mongo --port 57017 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mo
 rs.initiate({
   _id: "s2",
   members: [
-    { _id : 0, host : "localhost:57017" },
-    { _id : 1, host : "localhost:57018" },
-    { _id : 2, host : "localhost:57019", arbiterOnly: true }
+    { _id : 0, host : "database.crazyengage.com:57017" },
+    { _id : 1, host : "database.crazyengage.com:57018" },
+    { _id : 2, host : "database.crazyengage.com:57019", arbiterOnly: true }
   ]
 })
 
@@ -107,9 +107,9 @@ rs.initiate({
 	_id: "cfg",
 	configsvr: true,
 	members: [
-    { _id : 0, host : "localhost:57040" },
-    { _id : 1, host : "localhost:57041" },
-    { _id : 2, host : "localhost:57042" }
+    { _id : 0, host : "database.crazyengage.com:57040" },
+    { _id : 1, host : "database.crazyengage.com:57041" },
+    { _id : 2, host : "database.crazyengage.com:57042" }
   ]
 })
 EOF
@@ -138,9 +138,9 @@ db.createUser(
 db.auth("admin", "grw@123")
 
 # Do sharding
-sh.addShard("s0/localhost:37017")
-sh.addShard("s1/localhost:47017")
-sh.addShard("s2/localhost:57017")
+sh.addShard("s0/database.crazyengage.com:37017")
+sh.addShard("s1/database.crazyengage.com:47017")
+sh.addShard("s2/database.crazyengage.com:57017")
 sh.enableSharding("growthfunnel")
 
 # Create an administrator for growthfunnel
@@ -182,4 +182,4 @@ sh.shardCollection("growthfunnel.visitors", {"siteId": 1, "_id": 1})
 EOF
 
 sleep 5
-echo "Done setting up sharded environment on localhost"
+echo "Done setting up sharded environment on database.crazyengage.com"
