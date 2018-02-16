@@ -6,7 +6,7 @@ echo "killing mongod and mongos..."
 killall mongod
 killall mongos
 
-# start a replica set and tell it that it will be shard0
+# 1. start a replica set and tell it that it will be shard0
 mkdir -p $DB_PATH/shard0/rs0 $DB_PATH/shard0/rs1 $DB_PATH/shard0/rs2
 mongod --config ./confs/shard0/r0.conf
 mongod --config ./confs/shard0/r1.conf
@@ -23,19 +23,9 @@ rs.initiate({
     { _id : 2, host : "database.crazyengage.com:37019", arbiterOnly: true }
   ]
 })
-
-db.getSiblingDB("admin").createUser(
-  {
-    user: "shard0",
-    pwd: "grw@123",
-    roles: [
-      { role: "userAdminAnyDatabase", db: "admin" },
-    ]
-  }
-)
 EOF
 
-# start a replicate set and tell it that it will be a shard1
+# 2. start a replicate set and tell it that it will be a shard1
 mkdir -p $DB_PATH/shard1/rs0 $DB_PATH/shard1/rs1 $DB_PATH/shard1/rs2
 mongod --config ./confs/shard1/r0.conf
 mongod --config ./confs/shard1/r1.conf
@@ -52,19 +42,9 @@ rs.initiate({
     { _id : 2, host : "database.crazyengage.com:47019", arbiterOnly: true }
   ]
 })
-
-db.getSiblingDB("admin").createUser(
-  {
-    user: "shard1",
-    pwd: "grw@123",
-    roles: [
-      { role: "userAdminAnyDatabase", db: "admin" },
-    ]
-  }
-)
 EOF
 
-# start a replicate set and tell it that it will be a shard2
+# 3. start a replicate set and tell it that it will be a shard2
 mkdir -p $DB_PATH/shard2/rs0 $DB_PATH/shard2/rs1 $DB_PATH/shard2/rs2
 mongod --config ./confs/shard2/r0.conf
 mongod --config ./confs/shard2/r1.conf
@@ -81,20 +61,9 @@ rs.initiate({
     { _id : 2, host : "database.crazyengage.com:57019", arbiterOnly: true }
   ]
 })
-
-db.getSiblingDB("admin").createUser(
-  {
-    user: "shard2",
-    pwd: "grw@123",
-    roles: [
-      { role: "userAdminAnyDatabase", db: "admin" },
-    ]
-  }
-)
 EOF
 
-
-# now start 3 config servers
+# 4. now start 3 config servers
 mkdir -p $DB_PATH/config/rs0 $DB_PATH/config/rs1 $DB_PATH/config/rs2 
 mongod --config ./confs/config/r0.conf
 mongod --config ./confs/config/r1.conf
@@ -104,14 +73,54 @@ sleep 5
 
 mongo --port 57040 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
 rs.initiate({
-	_id: "cfg",
-	configsvr: true,
-	members: [
+  _id: "cfg",
+  configsvr: true,
+  members: [
     { _id : 0, host : "database.crazyengage.com:57040" },
     { _id : 1, host : "database.crazyengage.com:57041" },
     { _id : 2, host : "database.crazyengage.com:57042" }
   ]
 })
+EOF
+
+# Create shard's local user
+#1
+mongo --port 37017 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
+db.getSiblingDB("admin").createUser(
+  {
+    user: "shard0",
+    pwd: "grw@123",
+    roles: [
+      { role: "userAdminAnyDatabase", db: "admin" },
+    ]
+  }
+)
+EOF
+
+#2
+mongo --port 47017 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
+db.getSiblingDB("admin").createUser(
+  {
+    user: "shard1",
+    pwd: "grw@123",
+    roles: [
+      { role: "userAdminAnyDatabase", db: "admin" },
+    ]
+  }
+)
+EOF
+
+#3
+mongo --port 57017 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
+db.getSiblingDB("admin").createUser(
+  {
+    user: "shard2",
+    pwd: "grw@123",
+    roles: [
+      { role: "userAdminAnyDatabase", db: "admin" },
+    ]
+  }
+)
 EOF
 
 # now start the mongos on port 27018
