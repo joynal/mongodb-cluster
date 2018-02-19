@@ -4,22 +4,10 @@
 bash sharding.sh
 ```
 
-## Restart shard cluster
+## Start shard cluster
 
 ```
 bash start.sh
-```
-
-## Connect to mongos
-
-```
-mongo --port 27018
-```
-
-## Generate dummy data
-
-```
-node index.js
 ```
 
 ## Gracefully shutdown cluster
@@ -48,10 +36,28 @@ db.settings.save( { _id:"chunksize", value: <sizeInMB> } )
 sh.disableBalancing( "test.visitors")
 ```
 
-## Generate cluster key file
+## Create SSL user
 
+Example:
 ```
-cd /data/keys/mongodb/
-openssl rand -base64 756 > cluster.key
-chmod 400 cluster.key
+db.getSiblingDB("$external").runCommand(
+  {
+    createUser: "emailAddress=support@testsite.com,CN=*.testsite.com,OU=admin,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD",
+    roles: [
+      { role : "clusterAdmin", db : "admin" },
+      { role: "dbOwner", db: "growthfunnel" },
+    ],
+    writeConcern: { w: "majority" , wtimeout: 5000 }
+  }
+)
+```
+
+Validate
+```
+db.getSiblingDB("$external").auth(
+  {
+    mechanism: "MONGODB-X509",
+    user: "emailAddress=support@crazyengage.com,CN=*.crazyengage.com,OU=admin,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD"
+  }
+)
 ```
