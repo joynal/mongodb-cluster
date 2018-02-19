@@ -42,7 +42,7 @@ Example:
 ```
 db.getSiblingDB("$external").runCommand(
   {
-    createUser: "emailAddress=support@testsite.com,CN=*.testsite.com,OU=admin,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD",
+    createUser: "emailAddress=support@testsite.com,CN=*.testsite.com,OU=appadmin,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD",
     roles: [
       { role : "clusterAdmin", db : "admin" },
       { role: "dbOwner", db: "growthfunnel" },
@@ -57,7 +57,7 @@ Validate
 db.getSiblingDB("$external").auth(
   {
     mechanism: "MONGODB-X509",
-    user: "emailAddress=support@crazyengage.com,CN=*.crazyengage.com,OU=admin,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD"
+    user: "emailAddress=support@crazyengage.com,CN=*.crazyengage.com,OU=appadmin,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD"
   }
 )
 ```
