@@ -152,38 +152,32 @@ sh.addShard("s1/database.crazyengage.com:47017")
 sh.addShard("s2/database.crazyengage.com:57017")
 sh.enableSharding("growthfunnel")
 
-# Create an administrator for growthfunnel
+# Create an administrator for growthfunnel, will connect through SSL
 use growthfunnel
-db.createUser(
+
+# 1. Boss user
+db.getSiblingDB("$external").runCommand(
   {
-    user: "grw-admin",
-    pwd: "grw@123",
+    createUser: "emailAddress=support@crazyengage.com,CN=*.crazyengage.com,OU=appadmin,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD",
     roles: [
+      { role : "clusterAdmin", db : "admin" },
       { role: "dbOwner", db: "growthfunnel" },
-      { role : "clusterAdmin", db : "admin" }
-    ]
+    ],
+    writeConcern: { w: "majority" , wtimeout: 5000 }
   }
 )
 
-db.auth("grw-admin", "grw@123")
-
-# Create an application user
-db.createUser(
+# 2. Webapp user, only read write allowed
+db.getSiblingDB("$external").runCommand(
   {
-    user: "webapp",
-    pwd: "grw@123",
-    roles: [ { role: "readWrite", db: "growthfunnel" } ]
+    createUser: "emailAddress=support@crazyengage.com,CN=*.crazyengage.com,OU=webapp,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD",
+    roles: [
+      { role: "readWrite", db: "growthfunnel" },
+    ],
+    writeConcern: { w: "majority" , wtimeout: 5000 }
   }
 )
 
-# Create an observer user
-db.createUser(
-  {
-    user: "observer",
-    pwd: "grw@123",
-    roles: [ { role: "read", db: "growthfunnel" } ]
-  }
-)
 
 db.createCollection("visitors")
 db.visitors.ensureIndex({"siteId": 1, "_id": 1})
