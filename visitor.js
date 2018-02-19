@@ -41,6 +41,6 @@ const VisitorSchema = new Schema({
     get: castToUUID
   },
   createdAt: { type: Date, default: Date.now }
-});
+}, { shardKey: { siteId: 1, _id: 1 } });
 
 module.exports = mongoose.model("Visitor", VisitorSchema);

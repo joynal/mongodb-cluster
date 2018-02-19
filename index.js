@@ -1,10 +1,22 @@
 const mongoose = require("mongoose");
 const faker = require("faker");
 const v4 = require("uuid/v4");
+const fs = require('fs');
 const Visitor = require("./visitor");
 
+const ca = [fs.readFileSync(__dirname + "/opt/mongodb/CA.pem")];
+const key = fs.readFileSync(__dirname + "/opt/mongodb/client.key");
+const cert = fs.readFileSync(__dirname + "/opt/mongodb/client.crt");
+
+const userName = "emailAddress=support@crazyengage.com,CN=*.crazyengage.com,OU=appadmin,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD";
+
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://127.0.0.1:27017/growthfunnel");
+mongoose.connect("mongodb://127.0.0.1:27017/growthfunnel", {
+  ssl: true
+  sslCA:ca,
+  sslKey:key,
+  sslCert:cert,
+});
 
 mongoose.connection.on("error", err => {
   console.error(err);
