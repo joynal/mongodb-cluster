@@ -177,8 +177,15 @@ db.getSiblingDB("$external").runCommand(
     writeConcern: { w: "majority" , wtimeout: 5000 }
   }
 )
+EOF
 
-
+mongo --port 27018 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/admin-client.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
+db.getSiblingDB("$external").auth(
+  {
+    mechanism: "MONGODB-X509",
+    user: "emailAddress=support@crazyengage.com,CN=*.crazyengage.com,OU=appadmin,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD"
+  }
+)
 db.createCollection("visitors")
 db.visitors.ensureIndex({"siteId": 1, "_id": 1})
 sh.shardCollection("growthfunnel.visitors", {"siteId": 1, "_id": 1})
