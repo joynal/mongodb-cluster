@@ -1,4 +1,4 @@
-# Ceating self signed certificate
+# Creating self-signed certificate
 
 ## Step: 1 - Create a Certificate Authority
 
@@ -7,12 +7,12 @@ Generate a private key for CA certificate and keep it safe.
 openssl genrsa -out CA.key 4096
 ```
 
-You can add password for two step verification, add `des3`
+You can add password for two-step verification, add `des3`
 ```
 openssl genrsa -des3 -out CA.key 4096
 ```
 
-Now self sign to this certificate
+Now self-sign to this certificate
 
 ```
 openssl req -new -x509 -days 1825 -key CA.key -out CA.crt
