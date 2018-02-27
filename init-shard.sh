@@ -14,13 +14,13 @@ mongod --config ./confs/shard0/r2.conf
 
 sleep 5
 # connect to one server and initiate the set
-mongo --port 37017 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
+mongo --port 37017 --ssl --host database.fluddi.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
 rs.initiate({
   _id: "s0",
   members: [
-    { _id : 0, host : "database.crazyengage.com:37017" },
-    { _id : 1, host : "database.crazyengage.com:37018" },
-    { _id : 2, host : "database.crazyengage.com:37019", arbiterOnly: true }
+    { _id : 0, host : "database.fluddi.com:37017" },
+    { _id : 1, host : "database.fluddi.com:37018" },
+    { _id : 2, host : "database.fluddi.com:37019", arbiterOnly: true }
   ]
 })
 EOF
@@ -33,13 +33,13 @@ mongod --config ./confs/shard1/r2.conf
 
 sleep 5
 
-mongo --port 47017 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
+mongo --port 47017 --ssl --host database.fluddi.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
 rs.initiate({
   _id: "s1",
   members: [
-    { _id : 0, host : "database.crazyengage.com:47017" },
-    { _id : 1, host : "database.crazyengage.com:47018" },
-    { _id : 2, host : "database.crazyengage.com:47019", arbiterOnly: true }
+    { _id : 0, host : "database.fluddi.com:47017" },
+    { _id : 1, host : "database.fluddi.com:47018" },
+    { _id : 2, host : "database.fluddi.com:47019", arbiterOnly: true }
   ]
 })
 EOF
@@ -52,13 +52,13 @@ mongod --config ./confs/shard2/r2.conf
 
 sleep 5
 
-mongo --port 57017 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
+mongo --port 57017 --ssl --host database.fluddi.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
 rs.initiate({
   _id: "s2",
   members: [
-    { _id : 0, host : "database.crazyengage.com:57017" },
-    { _id : 1, host : "database.crazyengage.com:57018" },
-    { _id : 2, host : "database.crazyengage.com:57019", arbiterOnly: true }
+    { _id : 0, host : "database.fluddi.com:57017" },
+    { _id : 1, host : "database.fluddi.com:57018" },
+    { _id : 2, host : "database.fluddi.com:57019", arbiterOnly: true }
   ]
 })
 EOF
@@ -71,21 +71,21 @@ mongod --config ./confs/config/r2.conf
 
 sleep 5
 
-mongo --port 57040 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
+mongo --port 57040 --ssl --host database.fluddi.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
 rs.initiate({
   _id: "cfg",
   configsvr: true,
   members: [
-    { _id : 0, host : "database.crazyengage.com:57040" },
-    { _id : 1, host : "database.crazyengage.com:57041" },
-    { _id : 2, host : "database.crazyengage.com:57042" }
+    { _id : 0, host : "database.fluddi.com:57040" },
+    { _id : 1, host : "database.fluddi.com:57041" },
+    { _id : 2, host : "database.fluddi.com:57042" }
   ]
 })
 EOF
 
 # Create shard's local user
 #1
-mongo --port 37017 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
+mongo --port 37017 --ssl --host database.fluddi.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
 db.getSiblingDB("admin").createUser(
   {
     user: "shard0",
@@ -98,7 +98,7 @@ db.getSiblingDB("admin").createUser(
 EOF
 
 #2
-mongo --port 47017 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
+mongo --port 47017 --ssl --host database.fluddi.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
 db.getSiblingDB("admin").createUser(
   {
     user: "shard1",
@@ -111,7 +111,7 @@ db.getSiblingDB("admin").createUser(
 EOF
 
 #3
-mongo --port 57017 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
+mongo --port 57017 --ssl --host database.fluddi.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
 db.getSiblingDB("admin").createUser(
   {
     user: "shard2",
@@ -130,7 +130,7 @@ sleep 60
 echo "Connnecting to mongos and enabling sharding"
 
 # add shards and enable sharding on the growthfunnel db
-mongo --port 27018 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
+mongo --port 27018 --ssl --host database.fluddi.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
 
 # Create an super administrator 
 use admin
@@ -147,9 +147,9 @@ db.createUser(
 db.auth("admin", "grw@123")
 
 # Do sharding
-sh.addShard("s0/database.crazyengage.com:37017")
-sh.addShard("s1/database.crazyengage.com:47017")
-sh.addShard("s2/database.crazyengage.com:57017")
+sh.addShard("s0/database.fluddi.com:37017")
+sh.addShard("s1/database.fluddi.com:47017")
+sh.addShard("s2/database.fluddi.com:57017")
 sh.enableSharding("growthfunnel")
 
 # Create an administrator for growthfunnel, will connect through SSL
@@ -158,7 +158,7 @@ use growthfunnel
 # 1. Boss user
 db.getSiblingDB("$external").runCommand(
   {
-    createUser: "emailAddress=support@crazyengage.com,CN=*.crazyengage.com,OU=appadmin,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD",
+    createUser: "emailAddress=support@fluddi.com,CN=*.fluddi.com,OU=appadmin,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD",
     roles: [
       { role : "clusterAdmin", db : "admin" },
       { role: "dbOwner", db: "growthfunnel" },
@@ -170,7 +170,7 @@ db.getSiblingDB("$external").runCommand(
 # 2. Webapp user, only read write allowed
 db.getSiblingDB("$external").runCommand(
   {
-    createUser: "emailAddress=support@crazyengage.com,CN=*.crazyengage.com,OU=webapp,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD",
+    createUser: "emailAddress=support@fluddi.com,CN=*.fluddi.com,OU=webapp,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD",
     roles: [
       { role: "readWrite", db: "growthfunnel" },
     ],
@@ -179,11 +179,11 @@ db.getSiblingDB("$external").runCommand(
 )
 EOF
 
-mongo --port 27018 --ssl --host database.crazyengage.com --sslPEMKeyFile /opt/mongodb/admin-client.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
+mongo --port 27018 --ssl --host database.fluddi.com --sslPEMKeyFile /opt/mongodb/admin-client.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
 db.getSiblingDB("$external").auth(
   {
     mechanism: "MONGODB-X509",
-    user: "emailAddress=support@crazyengage.com,CN=*.crazyengage.com,OU=appadmin,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD"
+    user: "emailAddress=support@fluddi.com,CN=*.fluddi.com,OU=appadmin,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD"
   }
 )
 db.createCollection("visitors")
@@ -192,4 +192,4 @@ sh.shardCollection("growthfunnel.visitors", {"siteId": 1, "_id": 1})
 EOF
 
 sleep 5
-echo "Done setting up sharded environment on database.crazyengage.com"
+echo "Done setting up sharded environment on database.fluddi.com"
