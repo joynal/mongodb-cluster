@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Configure db path
 DB_PATH=/data/mongodb
 
@@ -129,7 +130,7 @@ echo "Waiting 60 seconds for the replica sets to fully come online"
 sleep 60
 echo "Connnecting to mongos and enabling sharding"
 
-# add shards and enable sharding on the growthfunnel db
+# add shards and enable sharding on the fluddi db
 mongo --port 27018 --ssl --host database.fluddi.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
 
 # Create an super administrator 
@@ -150,18 +151,18 @@ db.auth("admin", "grw@123")
 sh.addShard("s0/database.fluddi.com:37017")
 sh.addShard("s1/database.fluddi.com:47017")
 sh.addShard("s2/database.fluddi.com:57017")
-sh.enableSharding("growthfunnel")
+sh.enableSharding("fluddi")
 
-# Create an administrator for growthfunnel, will connect through SSL
-use growthfunnel
+# Create an administrator for fluddi, will connect through SSL
+use fluddi
 
 # 1. Boss user
 db.getSiblingDB("$external").runCommand(
   {
-    createUser: "emailAddress=support@fluddi.com,CN=*.fluddi.com,OU=appadmin,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD",
+    createUser: "emailAddress=support@fluddi.com,CN=*.fluddi.com,OU=appadmin,O=Fluddi,L=Dhaka,ST=Dhaka,C=BD",
     roles: [
       { role : "clusterAdmin", db : "admin" },
-      { role: "dbOwner", db: "growthfunnel" },
+      { role: "dbOwner", db: "fluddi" },
     ],
     writeConcern: { w: "majority" , wtimeout: 5000 }
   }
@@ -170,9 +171,9 @@ db.getSiblingDB("$external").runCommand(
 # 2. Webapp user, only read write allowed
 db.getSiblingDB("$external").runCommand(
   {
-    createUser: "emailAddress=support@fluddi.com,CN=*.fluddi.com,OU=webapp,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD",
+    createUser: "emailAddress=support@fluddi.com,CN=*.fluddi.com,OU=webapp,O=Fluddi,L=Dhaka,ST=Dhaka,C=BD",
     roles: [
-      { role: "readWrite", db: "growthfunnel" },
+      { role: "readWrite", db: "fluddi" },
     ],
     writeConcern: { w: "majority" , wtimeout: 5000 }
   }
@@ -183,12 +184,12 @@ mongo --port 27018 --ssl --host database.fluddi.com --sslPEMKeyFile /opt/mongodb
 db.getSiblingDB("$external").auth(
   {
     mechanism: "MONGODB-X509",
-    user: "emailAddress=support@fluddi.com,CN=*.fluddi.com,OU=appadmin,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD"
+    user: "emailAddress=support@fluddi.com,CN=*.fluddi.com,OU=appadmin,O=Fluddi,L=Dhaka,ST=Dhaka,C=BD"
   }
 )
 db.createCollection("visitors")
 db.visitors.ensureIndex({"siteId": 1, "_id": 1})
-sh.shardCollection("growthfunnel.visitors", {"siteId": 1, "_id": 1})
+sh.shardCollection("fluddi.visitors", {"siteId": 1, "_id": 1})
 EOF
 
 sleep 5
