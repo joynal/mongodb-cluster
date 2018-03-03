@@ -84,6 +84,8 @@ rs.initiate({
 })
 EOF
 
+sleep 5
+
 # Create shard's local user
 #1
 mongo --port 37017 --ssl --host database.fluddi.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
@@ -126,7 +128,7 @@ EOF
 
 # now start the mongos on port 27018
 mongos --config ./confs/mongos/m1.conf
-echo "Waiting 60 seconds for the replica sets to fully come online"
+echo "Waiting >>> 60 seconds for the replica sets to fully come online"
 sleep 60
 echo "Connnecting to mongos and enabling sharding"
 
