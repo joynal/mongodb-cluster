@@ -53,7 +53,7 @@ Authticate user
 db.getSiblingDB("$external").auth(
   {
     mechanism: "MONGODB-X509",
-    user: "emailAddress=support@fluddi.com,CN=*.fluddi.com,OU=appadmin,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD"
+    user: "emailAddress=support@fluddi.com,CN=*.fluddi.com,OU=appadmin,O=Fluddi,L=Dhaka,ST=Dhaka,C=BD"
   }
 )
 ```
@@ -119,10 +119,10 @@ Example:
 ```
 db.getSiblingDB("$external").runCommand(
   {
-    createUser: "emailAddress=support@fluddi.com,CN=*.fluddi.com,OU=appadmin,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD",
+    createUser: "emailAddress=support@fluddi.com,CN=*.fluddi.com,OU=appadmin,O=Fluddi,L=Dhaka,ST=Dhaka,C=BD",
     roles: [
       { role : "clusterAdmin", db : "admin" },
-      { role: "dbOwner", db: "growthfunnel" },
+      { role: "dbOwner", db: "fluddi" },
     ],
     writeConcern: { w: "majority" , wtimeout: 5000 }
   }
@@ -134,7 +134,7 @@ Validate
 db.getSiblingDB("$external").auth(
   {
     mechanism: "MONGODB-X509",
-    user: "emailAddress=support@fluddi.com,CN=*.fluddi.com,OU=appadmin,O=Growthfunnel,L=Dhaka,ST=Dhaka,C=BD"
+    user: "emailAddress=support@fluddi.com,CN=*.fluddi.com,OU=appadmin,O=Fluddi,L=Dhaka,ST=Dhaka,C=BD"
   }
 )
 ```
