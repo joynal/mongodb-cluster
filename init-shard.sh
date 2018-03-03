@@ -108,6 +108,8 @@ db.getSiblingDB("admin").createUser(
 )
 EOF
 
+echo ">>>>> shard0 local user created"
+
 #2
 mongo --port 47017 --ssl --host database.fluddi.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
 db.getSiblingDB("admin").createUser(
@@ -121,6 +123,8 @@ db.getSiblingDB("admin").createUser(
 )
 EOF
 
+echo ">>>>> shard1 local user created"
+
 #3
 mongo --port 57017 --ssl --host database.fluddi.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
 db.getSiblingDB("admin").createUser(
@@ -133,6 +137,8 @@ db.getSiblingDB("admin").createUser(
   }
 )
 EOF
+
+echo ">>>>> shard2 local user created"
 
 # now start the mongos on port 27018
 mongos --config ./confs/mongos/m1.conf
@@ -185,6 +191,11 @@ db.getSiblingDB("$external").runCommand(
 )
 EOF
 
+echo ">>>>> Created database admin"
+echo ">>>>> Shard enabled in database fluddi"
+echo ">>>>> Created appadmin SSL client user for fluddi"
+echo ">>>>> Created webapp SSL client user for web application"
+
 mongo --port 27018 --ssl --host database.fluddi.com --sslPEMKeyFile /opt/mongodb/admin-client.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
 db.getSiblingDB("$external").auth(
   {
@@ -199,6 +210,8 @@ db.createCollection("visitors")
 db.visitors.ensureIndex({"siteId": 1, "_id": 1})
 sh.shardCollection("fluddi.visitors", {"siteId": 1, "_id": 1})
 EOF
+
+echo ">>>>> Sharded Collection fluddi.visitors"
 
 sleep 5
 echo ">>>>> Done setting up sharded environment on database.fluddi.com"
