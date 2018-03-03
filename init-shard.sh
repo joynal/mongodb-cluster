@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # Configure db path
 DB_PATH=/data/mongodb
 
@@ -26,6 +25,8 @@ rs.initiate({
 })
 EOF
 
+echo ">>>>> shard0 replica initialized"
+
 # 2. start a replicate set and tell it that it will be a shard1
 mkdir -p $DB_PATH/shard1/rs0 $DB_PATH/shard1/rs1 $DB_PATH/shard1/rs2
 mongod --config ./confs/shard1/r0.conf
@@ -45,6 +46,8 @@ rs.initiate({
 })
 EOF
 
+echo ">>>>> shard1 replica initialized"
+
 # 3. start a replicate set and tell it that it will be a shard2
 mkdir -p $DB_PATH/shard2/rs0 $DB_PATH/shard2/rs1 $DB_PATH/shard2/rs2
 mongod --config ./confs/shard2/r0.conf
@@ -63,6 +66,8 @@ rs.initiate({
   ]
 })
 EOF
+
+echo ">>>>> shard2 replica initialized"
 
 # 4. now start 3 config servers
 mkdir -p $DB_PATH/config/rs0 $DB_PATH/config/rs1 $DB_PATH/config/rs2 
@@ -84,7 +89,10 @@ rs.initiate({
 })
 EOF
 
-sleep 5
+echo ">>>>> configsvr replica initialized"
+echo ">>>>> Wait 10 sec for every replica's primary come online"
+
+sleep 10
 
 # Create shard's local user
 #1
@@ -128,16 +136,15 @@ EOF
 
 # now start the mongos on port 27018
 mongos --config ./confs/mongos/m1.conf
-echo "Waiting >>> 60 seconds for the replica sets to fully come online"
+echo ">>>>> Waiting 60 seconds for the replica sets to fully come online"
+
 sleep 60
-echo "Connnecting to mongos and enabling sharding"
+
+echo ">>>>> Connnecting to mongos and enabling sharding"
 
 # add shards and enable sharding on the fluddi db
 mongo --port 27018 --ssl --host database.fluddi.com --sslPEMKeyFile /opt/mongodb/certificate.pem --sslCAFile /opt/mongodb/CA.pem << 'EOF'
-
-# Create an super administrator 
-use admin
-db.createUser(
+db.getSiblingDB("admin").createUser(
   {
     user: "admin",
     pwd: "grw@123",
@@ -147,18 +154,15 @@ db.createUser(
     ]
   }
 )
-db.auth("admin", "grw@123")
 
-# Do sharding
+db.getSiblingDB("admin").auth("admin", "grw@123")
+
 sh.addShard("s0/database.fluddi.com:37017")
 sh.addShard("s1/database.fluddi.com:47017")
 sh.addShard("s2/database.fluddi.com:57017")
+
 sh.enableSharding("fluddi")
 
-# Create an administrator for fluddi, will connect through SSL
-use fluddi
-
-# 1. Boss user
 db.getSiblingDB("$external").runCommand(
   {
     createUser: "emailAddress=support@fluddi.com,CN=*.fluddi.com,OU=appadmin,O=Fluddi,L=Dhaka,ST=Dhaka,C=BD",
@@ -170,7 +174,6 @@ db.getSiblingDB("$external").runCommand(
   }
 )
 
-# 2. Webapp user, only read write allowed
 db.getSiblingDB("$external").runCommand(
   {
     createUser: "emailAddress=support@fluddi.com,CN=*.fluddi.com,OU=webapp,O=Fluddi,L=Dhaka,ST=Dhaka,C=BD",
@@ -189,10 +192,13 @@ db.getSiblingDB("$external").auth(
     user: "emailAddress=support@fluddi.com,CN=*.fluddi.com,OU=appadmin,O=Fluddi,L=Dhaka,ST=Dhaka,C=BD"
   }
 )
+
+use fluddi
+
 db.createCollection("visitors")
 db.visitors.ensureIndex({"siteId": 1, "_id": 1})
 sh.shardCollection("fluddi.visitors", {"siteId": 1, "_id": 1})
 EOF
 
 sleep 5
-echo "Done setting up sharded environment on database.fluddi.com"
+echo ">>>>> Done setting up sharded environment on database.fluddi.com"
