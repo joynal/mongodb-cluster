@@ -2,6 +2,10 @@
 
 Sample sharded cluster with SSL enabled
 
+## Architecture
+
+![Alt text](images/architecture.png "MongoDB cluster architecture")
+
 ## Pre-requisites
 
 * MongoDB
