@@ -73,6 +73,48 @@ Check cluster status
 sh.status()
 ```
 
+This will return something like this:
+```
+--- Sharding Status --- 
+  sharding version: {
+    "_id" : 1,
+    "minCompatibleVersion" : 5,
+    "currentVersion" : 6,
+    "clusterId" : ObjectId("5a9acadca09f07b6bb63f076")
+  }
+  shards:
+        {  "_id" : "s0",  "host" : "s0/database.fluddi.com:37017,database.fluddi.com:37018",  "state" : 1 }
+        {  "_id" : "s1",  "host" : "s1/database.fluddi.com:47017,database.fluddi.com:47018",  "state" : 1 }
+        {  "_id" : "s2",  "host" : "s2/database.fluddi.com:57017,database.fluddi.com:57018",  "state" : 1 }
+  active mongoses:
+        "3.6.3" : 1
+  autosplit:
+        Currently enabled: yes
+  balancer:
+        Currently enabled:  yes
+        Currently running:  no
+        Failed balancer rounds in last 5 attempts:  0
+        Migration Results for the last 24 hours: 
+                No recent migrations
+  databases:
+        {  "_id" : "config",  "primary" : "config",  "partitioned" : true }
+                config.system.sessions
+                        shard key: { "_id" : 1 }
+                        unique: false
+                        balancing: true
+                        chunks:
+                                s0  1
+                        { "_id" : { "$minKey" : 1 } } -->> { "_id" : { "$maxKey" : 1 } } on : s0 Timestamp(1, 0) 
+        {  "_id" : "fluddi",  "primary" : "s0",  "partitioned" : true }
+                fluddi.visitors
+                        shard key: { "siteId" : 1, "_id" : 1 }
+                        unique: false
+                        balancing: true
+                        chunks:
+                                s0  1
+                        { "siteId" : { "$minKey" : 1 }, "_id" : { "$minKey" : 1 } } -->> { "siteId" : { "$maxKey" : 1 }, "_id" : { "$maxKey" : 1 } } on : s0 Timestamp(1, 0)
+```
+
 ## Step-5: Modify chunk size
 
 Make chunk size smaller for demonstration purpose otherwise, you will need to generate a huge volume of data.
