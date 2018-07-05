@@ -3,6 +3,8 @@
 Sample MongoDB sharded cluster with SSL enabled. This cluster will run on a single machine, each component will start on separate process & port.
 This cluster partitioned into three shards, each shard contains two data members and one arbitrary member.
 
+For more details follow this article, [Create a MongoDB sharded cluster with SSL enabled](https://hackernoon.com/create-a-mongodb-sharded-cluster-with-ssl-enabled-dace56bc7a17).
+
 ## Architecture
 
 ![Alt text](images/architecture.png "MongoDB cluster architecture")
