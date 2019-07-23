@@ -1,22 +1,23 @@
-const mongoose = require("mongoose");
-const v4 = require("uuid/v4");
-const uuidParse = require("uuid-parse");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const v4 = require('uuid/v4');
+const uuidParse = require('uuid-parse');
+
+const { Schema } = mongoose;
 
 // Covert str to buffer value
-const castToBuffer = str => {
+const castToBuffer = (str) => {
   if (!str) {
     return null;
   }
   if (Buffer.isBuffer(str) || Buffer.isBuffer(str.buffer)) {
     return str;
   }
-  let buffer = uuidParse.parse(str);
+  const buffer = uuidParse.parse(str);
   return new mongoose.Types.Buffer(buffer).toObject(0x04);
 };
 
 // Convert buffer to uuid
-const castToUUID = buffer => {
+const castToUUID = (buffer) => {
   if (!buffer || buffer.length !== 16) {
     return null;
   }
@@ -28,7 +29,7 @@ const VisitorSchema = new Schema({
     type: mongoose.Schema.Types.Buffer,
     set: castToBuffer,
     get: castToUUID,
-    default: () => castToBuffer(v4())
+    default: () => castToBuffer(v4()),
   },
   firstName: String,
   lastName: String,
@@ -38,9 +39,9 @@ const VisitorSchema = new Schema({
   siteId: {
     type: mongoose.Schema.Types.Buffer,
     set: castToBuffer,
-    get: castToUUID
+    get: castToUUID,
   },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
 }, { shardKey: { siteId: 1, _id: 1 } });
 
-module.exports = mongoose.model("Visitor", VisitorSchema);
+module.exports = mongoose.model('Visitor', VisitorSchema);
