@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const v4 = require('uuid/v4');
-const uuidParse = require('uuid-parse');
+import mongoose from 'mongoose';
+import { v4 } from 'uuid';
+import uuidParse from 'uuid-parse';
 
 const { Schema } = mongoose;
 
@@ -44,4 +44,4 @@ const VisitorSchema = new Schema({
   createdAt: { type: Date, default: Date.now },
 }, { shardKey: { siteId: 1, _id: 1 } });
 
-module.exports = mongoose.model('Visitor', VisitorSchema);
+export default mongoose.model('Visitor', VisitorSchema);

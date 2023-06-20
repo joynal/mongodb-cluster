@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+
+  zulfiqur_1:
+    image: mongo
+    container_name: zulfiqur
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example

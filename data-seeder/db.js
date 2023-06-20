@@ -1,11 +1,13 @@
-require('dotenv').config();
-const fs = require('fs');
-const mongoose = require('mongoose');
+import {config} from 'dotenv';
+import fs from 'fs'
+import mongoose from "mongoose";
+
+config();
 
 mongoose.Promise = Promise;
 mongoose.connect(process.env.MONGODB_URL, {
   ssl: true,
-  auth: { authMechanism: 'MONGODB-X509' },
+  auth: {authMechanism: 'MONGODB-X509'},
   user: process.env.MONGODB_SSL_USER,
   sslCA: [fs.readFileSync(process.env.MONGODB_ROOT_CERT)],
   sslKey: fs.readFileSync(process.env.MONGODB_CLIENT_CERT_KEY),

@@ -1,0 +1,7 @@
+- generate self signed certificate
+- try mongodb replica with docker
+- configure shared cluster
+- update data seeding scritps
+- test with dummy data
+- update docs
+- tag old version of code

@@ -1,21 +1,25 @@
 {
   "name": "mongodb-sample-cluster",
-  "version": "1.0.0",
-  "description": "Mongo sample cluster",
-  "main": "index.js",
-  "repository": "git@github.com:joynal/mongodb-sample-cluster.git",
-  "author": "Joynal Abedin <joynal3483@gmail.com>",
+  "main": "data-seeder/main.js",
+  "repository": "https://github.com/joynal/mongodb-cluster",
+  "author": "Joynal Abedin <hi@joynal.dev>",
   "license": "MIT",
   "dependencies": {
-    "dotenv": "^5.0.0",
-    "faker": "^4.1.0",
-    "mongoose": "^5.7.5",
-    "uuid": "^3.2.1",
-    "uuid-parse": "^1.0.0"
+    "@faker-js/faker": "^8.0.2",
+    "dotenv": "^16.3.1",
+    "mongoose": "^7.3.0",
+    "uuid": "^9.0.0",
+    "uuid-parse": "^1.1.0"
   },
   "devDependencies": {
-    "eslint": "^6.3.0",
-    "eslint-config-airbnb-base": "^13.2.0",
-    "eslint-plugin-import": "^2.18.2"
+    "@babel/eslint-parser": "^7.22.5",
+    "eslint": "^8.43.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5"
+  },
+  "type": "module",
+  "engines": {
+    "node": "^18.12.0",
+    "npm": "^8.19.2"
   }
 }
