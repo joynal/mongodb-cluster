@@ -1,0 +1,33 @@
+[req]
+basicConstraints = CA:TRUE
+keyUsage = keyCertSign, cRLSign
+distinguished_name = req_distinguished_name
+x509_extensions = v3_ca
+req_extensions = v3_req
+prompt = no
+
+
+[req_distinguished_name]
+C = NL
+ST = Nord Holland
+L = Purmerend
+O = Fluddi
+OU = Database Instance
+CN = *.fluddi.com
+emailAddress = support@fluddi.com
+
+[v3_ca]
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer:always
+basicConstraints = CA:false
+keyUsage = critical, digitalSignature
+ 
+[v3_req]
+subjectKeyIdentifier = hash
+nsCertType = server
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = *.fluddi.com

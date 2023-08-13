@@ -10,11 +10,10 @@ processManagement:
   fork: true
 
 net:
-  ssl:
-    mode: requireSSL
-    PEMKeyFile: /opt/mongodb/certificate.pem
+  tls:
+    mode: requireTLS
     CAFile: /opt/mongodb/CA.pem
-    clusterFile: /opt/mongodb/certificate.pem
+    certificateKeyFile: /opt/mongodb/member.pem
   
   port: 27019
   bindIp: 127.0.0.1

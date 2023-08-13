@@ -1,7 +1,5 @@
 storage:
   dbPath: /data/mongodb/config/rs1
-  journal:
-    enabled: true
 
 systemLog:
   destination: file
@@ -12,11 +10,10 @@ processManagement:
   fork: true
 
 net:
-  ssl:
-    mode: requireSSL
-    PEMKeyFile: /opt/mongodb/certificate.pem
+  tls:
+    mode: requireTLS
     CAFile: /opt/mongodb/CA.pem
-    clusterFile: /opt/mongodb/certificate.pem
+    certificateKeyFile: /opt/mongodb/member.pem
 
   bindIp: 127.0.0.1
   port: 57041

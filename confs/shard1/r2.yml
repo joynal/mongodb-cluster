@@ -1,29 +1,26 @@
 storage:
-  dbPath: /data/mongodb/shard2/rs2
+  dbPath: /data/mongodb/shard1/rs2
   directoryPerDB: true
-  journal:
-    enabled: true
 
 systemLog:
   destination: file
   logAppend: true
-  path: /var/log/mongodb/test-cluster/s2-r2.log
+  path: /var/log/mongodb/test-cluster/s1-r2.log
 
 replication:
-  replSetName: s2
+  replSetName: s1
 
 processManagement:
   fork: true
 
 net:
-  ssl:
-    mode: requireSSL
-    PEMKeyFile: /opt/mongodb/certificate.pem
+  tls:
+    mode: requireTLS
     CAFile: /opt/mongodb/CA.pem
-    clusterFile: /opt/mongodb/certificate.pem
+    certificateKeyFile: /opt/mongodb/member.pem
 
   bindIp: 127.0.0.1
-  port: 57019
+  port: 47019
 
 sharding:
   clusterRole: "shardsvr"

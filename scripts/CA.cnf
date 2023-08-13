@@ -1,0 +1,30 @@
+[req]
+basicConstraints = CA:TRUE
+keyUsage = keyCertSign, cRLSign
+distinguished_name = req_distinguished_name
+x509_extensions = v3_ca
+req_extensions = v3_req
+prompt = no
+
+
+[req_distinguished_name]
+C = NL
+ST = Nord Holland
+L = Purmerend
+O = Kryptonite Soft Ltd
+OU = IT
+CN = Security Kryptonite Soft
+emailAddress = support@kryptonite.com
+
+[v3_ca]
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer:always
+basicConstraints = critical, CA:true, pathlen:0
+keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+ 
+[v3_req]
+subjectKeyIdentifier = hash
+basicConstraints = critical, CA:false
+nsCertType = server
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment
+extendedKeyUsage = serverAuth
